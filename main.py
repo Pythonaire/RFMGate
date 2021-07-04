@@ -9,7 +9,7 @@ logging.basicConfig(level=logging.INFO, format="[%(module)s] %(message)s")
 file = open("RFM69.json","r")
 RFM69Devices = json.load(file)
 file.close()
-# {"10": "None", "11": "None": "12": None}
+# example {"10": "None", "11": "None": "12": None, ....}
 for x, y in RFM69Devices.items(): # convert to python None for easier handling
     y = None
 
