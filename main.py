@@ -6,13 +6,17 @@ from flask import Flask, request
 
 logging.basicConfig(level=logging.INFO, format="[%(module)s] %(message)s")
 
+# RFM69.json contain al defined sensors
+# example {"10": "None", "11": "None": "12": None, ....}
+# RFM69Devices store cache values and keys
 file = open("RFM69.json","r")
 RFM69Devices = json.load(file)
 file.close()
-# example {"10": "None", "11": "None": "12": None, ....}
 for x, y in RFM69Devices.items(): # convert to python None for easier handling
     y = None
 
+# Flask Server setValue() receive http-requests, forward them to the mcu 
+# and return the mcu values to the requestor
 app = Flask(__name__)
 @app.route('/setValue', methods=['POST', 'GET'])
 def setValue():
@@ -32,7 +36,7 @@ def setValue():
     except socket.error as e:
         logging.info('**** socket exception: {}'.format(e))
     
-
+# Flask Server cacheed() receive http-requests and send back the cached mcu values
 @app.route('/cached', methods=['POST', 'GET'])
 def cached():
     global RFM69Devices
@@ -77,7 +81,7 @@ class RFMTransceiver():
         #logging.info("**** send command {0} to node {1} ****".format(cmd, to_node))
         self.rfm69.send(value, int(to_node), self.NODE, 0, 0)
         self.start_listen()
-        time.sleep(0.3) # 100 ms set on mcu
+        time.sleep(0.3) # 100 ms set on mcu, wait 300 ms to be able send a new command to the mcu
 
 
     def mcu_recv(self, irq):
