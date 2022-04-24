@@ -83,7 +83,6 @@ class RFMTransceiver():
         self.start_listen()
         time.sleep(0.3) # 100 ms set on mcu, wait 300 ms to be able send a new command to the mcu
 
-
     def mcu_recv(self, irq):
         global RFM69Devices
         data = self.rfm69.receive(keep_listening= True, rx_filter=self.NODE)
